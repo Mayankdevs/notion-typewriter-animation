@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Typewriter Animation</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: monospace;
+      background: #fff;
+      color: #000;
+    }
+    pre {
+      white-space: pre;
+      font-size: 1em;
+      margin: 0;
+    }
+    .cursor {
+      display: inline-block;
+      width: 1px;
+      background-color: currentColor;
+      margin-left: 2px;
+      animation: blink 0.7s steps(1) infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <pre id="typewriter"></pre>
+  <script>
+    // The full text to be typed (with newlines and exact spacing)
+    const fullText = `📍 Based in Gurugram, IN
+💼 Currently working on
+  >> <user growth> && <retention> && <pricing strategy> && <CRO> @ unikon.ai
+⚡ 21`;
+
+    const container = document.getElementById("typewriter");
+    // Create a text node for the typed content
+    const textNode = document.createTextNode("");
+    container.appendChild(textNode);
+    // Create the blinking cursor element
+    const cursor = document.createElement("span");
+    cursor.className = "cursor";
+    cursor.textContent = "|";
+    container.appendChild(cursor);
+
+    let index = 0;
+    const typingDelay = 50; // delay in ms between characters
+
+    function typeChar() {
+      if (index < fullText.length) {
+        textNode.data += fullText.charAt(index);
+        index++;
+        setTimeout(typeChar, typingDelay);
+      } else {
+        // Typing complete: remove cursor
+        container.removeChild(cursor);
+
+        // Replace plain text "@ unikon.ai" with a clickable hyperlink.
+        // First, escape the text to safely convert special characters to HTML entities.
+        let finalText = textNode.data
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+        // Replace the exact substring with the hyperlink (the plain text appears only during typing)
+        finalText = finalText.replace(
+          "@ unikon.ai",
+          '<a href="https://unikon.ai/" target="_blank">@ unikon.ai</a>'
+        );
+        // Update the container's HTML (the <pre> element preserves the spacing)
+        container.innerHTML = finalText;
+      }
+    }
+
+    // Start the typewriter effect after a brief initial delay
+    setTimeout(typeChar, 500);
+  </script>
+</body>
+</html>
