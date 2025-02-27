@@ -2,23 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Typewriter Animation</title>
+  <title>Typewriter Animation - VS Code Theme</title>
   <style>
     body {
       margin: 0;
       padding: 10px;
       font-family: monospace;
-      background: #fff;
-      color: #000;
+      background-color: #1E1E1E;
+      color: #D4D4D4;
+      cursor: default;
     }
-    pre {
+    #typewriter {
       white-space: pre;
+      user-select: none;
+      caret-color: transparent;
       font-size: 1em;
       margin: 0;
+    }
+    a {
+      color: #007ACC;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
     }
     .cursor {
       display: inline-block;
       width: 1px;
+      height: 1em;
       background-color: currentColor;
       margin-left: 2px;
       animation: blink 0.7s steps(1) infinite;
@@ -29,53 +40,33 @@
   </style>
 </head>
 <body>
-  <pre id="typewriter"></pre>
+  <div id="typewriter"></div>
   <script>
-    // The full text to be typed (with newlines and exact spacing)
     const fullText = `📍 Based in Gurugram, IN
-💼 Currently working on
-  >> <user growth> && <retention> && <pricing strategy> && <CRO> @ unikon.ai
+💼 Currently running real experiments on
+  >> <signup flows for user growth> && <digging into user data to plug retention leaks and boost engagement> @ unikon.ai
 ⚡ 21`;
-
     const container = document.getElementById("typewriter");
-    // Create a text node for the typed content
-    const textNode = document.createTextNode("");
-    container.appendChild(textNode);
-    // Create the blinking cursor element
-    const cursor = document.createElement("span");
-    cursor.className = "cursor";
-    cursor.textContent = "|";
-    container.appendChild(cursor);
-
-    let index = 0;
-    const typingDelay = 50; // delay in ms between characters
-
+    let typedString = "", index = 0, typingDelay = 50;
     function typeChar() {
       if (index < fullText.length) {
-        textNode.data += fullText.charAt(index);
-        index++;
-        setTimeout(typeChar, typingDelay);
-      } else {
-        // Typing complete: remove cursor
-        container.removeChild(cursor);
-
-        // Replace plain text "@ unikon.ai" with a clickable hyperlink.
-        // First, escape the text to safely convert special characters to HTML entities.
-        let finalText = textNode.data
+        typedString += fullText.charAt(index++);
+        let partialHTML = typedString
           .replace(/&/g, "&amp;")
           .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
-        // Replace the exact substring with the hyperlink (the plain text appears only during typing)
-        finalText = finalText.replace(
-          "@ unikon.ai",
-          '<a href="https://unikon.ai/" target="_blank">@ unikon.ai</a>'
-        );
-        // Update the container's HTML (the <pre> element preserves the spacing)
-        container.innerHTML = finalText;
+          .replace(/>/g, "&gt;")
+          .replace(/&gt;&gt;/g, '<span style="color:#569CD6;">&gt;&gt;</span>')
+          .replace(/&&/g, '<span style="color:#D7BA7D;">&&</span>')
+          .replace(/&lt;signup flows for user growth&gt;/g, '<span style="color:#4EC9B0;">&lt;signup flows for user growth&gt;</span>')
+          .replace(/&lt;digging into user data to plug retention leaks and boost engagement&gt;/g, '<span style="color:#C586C0;">&lt;digging into user data to plug retention leaks and boost engagement&gt;</span>')
+          .replace(/@ unikon\.ai/g, '<a href="https://unikon.ai/" target="_blank"><u><em>@ unikon.ai</em></u></a>')
+          .replace(/\n/g, "<br>");
+        container.innerHTML = partialHTML + '<span class="cursor"></span>';
+        setTimeout(typeChar, typingDelay);
+      } else {
+        container.innerHTML = container.innerHTML.replace('<span class="cursor"></span>', '');
       }
     }
-
-    // Start the typewriter effect after a brief initial delay
     setTimeout(typeChar, 500);
   </script>
 </body>
