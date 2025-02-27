@@ -34,9 +34,7 @@
       margin-left: 2px;
       animation: blink 0.7s steps(1) infinite;
     }
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
+    @keyframes blink { 50% { opacity: 0; } }
   </style>
 </head>
 <body>
@@ -44,10 +42,13 @@
   <script>
     const fullText = `📍 Based in Gurugram, IN
 💼 Currently running real experiments on
-  >> <signup flows for user growth> && <digging into user data to plug retention leaks and boost engagement> @ unikon.ai
+  >> <signup flows for user growth> && 
+     <digging into user data to plug retention leaks and boost engagement> @ unikon.ai
 ⚡ 21`;
+    
     const container = document.getElementById("typewriter");
     let typedString = "", index = 0, typingDelay = 50;
+    
     function typeChar() {
       if (index < fullText.length) {
         typedString += fullText.charAt(index++);
@@ -67,6 +68,7 @@
         container.innerHTML = container.innerHTML.replace('<span class="cursor"></span>', '');
       }
     }
+    
     setTimeout(typeChar, 500);
   </script>
 </body>
